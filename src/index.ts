@@ -2,7 +2,7 @@ import { OdataQueryParser } from "./parser";
 
 function filterParser() {
     try {
-        const filter = "Title le 'Article1' and Title le 'Article1'";
+        const filter = "Title le 'Article1    ' and Title le '   Article1' concat('Uday', 'singh') eq 'Uday Singh     '";
         const parser = new OdataQueryParser(filter);
         console.log(parser.getParsedFilterStr());
     } catch (error) {

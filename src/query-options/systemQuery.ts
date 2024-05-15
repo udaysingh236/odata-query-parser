@@ -1,4 +1,4 @@
-export const operators: {[index: string] : string} = {
+export const operators: { [index: string]: string } = {
     // Comparison Operators
     eq: '=',
     ne: '<>',
@@ -21,5 +21,12 @@ export const operators: {[index: string] : string} = {
     mul: '*',
     div: '/',
     mod: '%'
+};
 
-} 
+export const queryFuncs: { [index: string]: (funcArgs: string) => string } = {
+    concat: function (funcArgs: string) {
+        console.log('From func ' + funcArgs);
+
+        return 'Inside function concat';
+    }
+};
