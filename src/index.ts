@@ -1,3 +1,14 @@
-export function adder(num1:number, num2: number): number {
-    return num1 + num2;
+import { OdataQueryParser } from "./parser";
+
+function filterParser() {
+    try {
+        const filter = "Title le 'Article1' and Title le 'Article1'";
+        const parser = new OdataQueryParser(filter);
+        console.log(parser.getParsedFilterStr());
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        
+    }
 }
+
+filterParser();
