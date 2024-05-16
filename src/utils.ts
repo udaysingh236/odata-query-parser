@@ -1,4 +1,14 @@
-export const WHITE_SPACE = ' ';
-export const WHITE_SPACE_ASCII = '%20';
-export const OPENING_BRACKET = '(';
-export const CLOSING_BRACKET = ')';
+export const constants = {
+    WHITE_SPACE: ' ',
+    WHITE_SPACE_ASCII: '%20',
+    OPENING_BRACKET: '(',
+    CLOSING_BRACKET: ')',
+    INITIALIZE_STR: '',
+    INITIALIZE_STR_ONESPACE: ' ',
+    INITIALIZE_NUM_ZERO: 0,
+    SINGLE_QUOTE: `'`
+};
+
+export function removeStartEndQuotes(str: string): string {
+    return str.substring(1, str.length - 1);
+}
