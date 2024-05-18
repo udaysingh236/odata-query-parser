@@ -6,9 +6,5 @@ export const constants = {
     INITIALIZE_STR: '',
     INITIALIZE_STR_ONESPACE: ' ',
     INITIALIZE_NUM_ZERO: 0,
-    SINGLE_QUOTE: `'`
+    SINGLE_QUOTE: `'`,
 };
-
-export function removeStartEndQuotes(str: string): string {
-    return str.substring(1, str.length - 1);
-}
