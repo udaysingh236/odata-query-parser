@@ -7,4 +7,5 @@ export const constants = {
     INITIALIZE_STR_ONESPACE: ' ',
     INITIALIZE_NUM_ZERO: 0,
     SINGLE_QUOTE: `'`,
+    ORDERBY_VALUES: ['asc','desc']
 };

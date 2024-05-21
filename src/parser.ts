@@ -1,6 +1,6 @@
 import { constants } from './utils/constants';
 import { operatorLexer, conditionLexer, groupingLexer, queryFuncLexer } from './lexer';
-import { checkSpecialChar } from './utils/helper';
+import { checkDigitOnly, checkSpecialChar } from './utils/helper';
 
 export interface IOdataFilterToken {
     tokenType: string;
@@ -9,23 +9,72 @@ export interface IOdataFilterToken {
     funcArgs?: string;
 }
 
+export interface IOdataOrderByToken {
+    tokenType: string;
+    colValue: string;
+    colOrder: string;
+}
+
+export interface IOdataTopToken {
+    tokenType: string;
+    value: number;
+}
+
+export interface IOdataSkipToken {
+    tokenType: string;
+    value: number;
+}
+
 export interface IParsedFilterRes {
     error?: Error;
     token: IOdataFilterToken[];
 }
 
+export interface IParsedOrderByRes {
+    error?: Error;
+    token: IOdataOrderByToken[];
+}
+
+export interface IParsedSkipRes {
+    error?: Error;
+    token: IOdataSkipToken;
+}
+
+export interface IParsedTopRes {
+    error?: Error;
+    token: IOdataTopToken;
+}
+
 export class OdataQueryParser {
     private filterTokens: IOdataFilterToken[];
     private filterToken: IOdataFilterToken;
+    private orderByToken: IOdataOrderByToken;
+    private orderByTokens: IOdataOrderByToken[];
+    private skipToken: IOdataSkipToken;
+    private topToken: IOdataTopToken;
     private prevLexerSubType: string;
 
     constructor() {
         this.prevLexerSubType = constants.INITIALIZE_STR;
         this.filterTokens = [];
+        this.orderByTokens = [];
         this.filterToken = {
             tokenType: '',
             subType: '',
             value: '',
+        };
+        this.orderByToken = {
+            tokenType: '',
+            colValue: '',
+            colOrder: '',
+        };
+        this.skipToken = {
+            tokenType: '',
+            value: 0,
+        };
+        this.topToken = {
+            tokenType: '',
+            value: 0,
         };
     }
 
@@ -140,6 +189,48 @@ export class OdataQueryParser {
         }
     }
 
+    private parseOrderBy(sourceStr: string) {
+        const clauses = sourceStr.split(','); //ReleaseDate asc, Rating desc
+        for (let index = 0; index < clauses.length; index++) {
+            const clause = clauses[index];
+            let [col, order, ...restData] = clause.trim().split(' '); // ReleaseDate asc
+            col = col.trim();
+            order = order.trim();
+            if (!col || !order || col.length === 0 || order.length === 0 || restData.length > 0) {
+                // guard clause
+                throw new Error(`order by needed one column name seperated by space followed with ordering, received: ${clause}`);
+            } else if (!constants.ORDERBY_VALUES.includes(order)) {
+                throw new Error(`order by can be one of ${constants.ORDERBY_VALUES.join(',')}, received: ${order}`);
+            }
+            this.orderByToken.tokenType = 'orderByExp';
+            this.orderByToken.colValue = col;
+            this.orderByToken.colOrder = order;
+            this.appendToOrderByToken(this.orderByToken);
+        }
+    }
+
+    private parseTop(source: string) {
+        if (!checkDigitOnly(source)) {
+            throw new Error('Top should contain only integers');
+        }
+        const limit = parseInt(source);
+        this.topToken = {
+            tokenType: 'topExp',
+            value: limit,
+        };
+    }
+
+    private parseSkip(source: string) {
+        if (!checkDigitOnly(source)) {
+            throw new Error('Skip should contain only integers');
+        }
+        const offset = parseInt(source);
+        this.skipToken = {
+            tokenType: 'skipExp',
+            value: offset,
+        };
+    }
+
     private getInExpValue(sourceStr: string, currInd: number): number {
         let tillNowStr = constants.INITIALIZE_STR;
         let skipInd = currInd;
@@ -164,11 +255,24 @@ export class OdataQueryParser {
         this.resetFilterToken();
     }
 
+    private appendToOrderByToken(orderByToken: IOdataOrderByToken) {
+        this.orderByTokens.push(orderByToken);
+        this.resetOrderByToken();
+    }
+
     private resetFilterToken() {
         this.filterToken = {
             tokenType: '',
             subType: '',
             value: '',
+        };
+    }
+
+    private resetOrderByToken() {
+        this.orderByToken = {
+            tokenType: '',
+            colValue: '',
+            colOrder: '',
         };
     }
 
@@ -181,7 +285,49 @@ export class OdataQueryParser {
         } catch (err) {
             return {
                 error: err as Error,
-                token: this.filterTokens
+                token: this.filterTokens,
+            };
+        }
+    }
+
+    public getParsedOrderBy(sourceStr: string): IParsedOrderByRes {
+        try {
+            this.parseOrderBy(sourceStr);
+            return {
+                token: this.orderByTokens,
+            };
+        } catch (err) {
+            return {
+                error: err as Error,
+                token: this.orderByTokens,
+            };
+        }
+    }
+
+    public getParsedSkipToken(source: string): IParsedSkipRes {
+        try {
+            this.parseSkip(source);
+            return {
+                token: this.skipToken,
+            };
+        } catch (err) {
+            return {
+                error: err as Error,
+                token: this.skipToken,
+            };
+        }
+    }
+
+    public getParsedTopToken(source: string): IParsedTopRes {
+        try {
+            this.parseTop(source);
+            return {
+                token: this.topToken,
+            };
+        } catch (err) {
+            return {
+                error: err as Error,
+                token: this.topToken,
             };
         }
     }
