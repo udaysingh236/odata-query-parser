@@ -1,4 +1,4 @@
-import { IOdataFilterToken } from './parser';
+import { IOdataFilterToken } from '..';
 import { constants } from './utils/constants';
 
 export const operatorLexer: Record<string, (sourceStr?: string, index?: number, tillNowStr?: string) => IOdataFilterToken> = {

@@ -1,49 +1,7 @@
 import { constants } from './utils/constants';
 import { operatorLexer, conditionLexer, groupingLexer, queryFuncLexer } from './lexer';
 import { checkDigitOnly, checkSpecialChar } from './utils/helper';
-
-export interface IOdataFilterToken {
-    tokenType: string;
-    subType: string;
-    value: string;
-    funcArgs?: string;
-}
-
-export interface IOdataOrderByToken {
-    tokenType: string;
-    colValue: string;
-    colOrder: string;
-}
-
-export interface IOdataTopToken {
-    tokenType: string;
-    value: number;
-}
-
-export interface IOdataSkipToken {
-    tokenType: string;
-    value: number;
-}
-
-export interface IParsedFilterRes {
-    error?: Error;
-    token: IOdataFilterToken[];
-}
-
-export interface IParsedOrderByRes {
-    error?: Error;
-    token: IOdataOrderByToken[];
-}
-
-export interface IParsedSkipRes {
-    error?: Error;
-    token: IOdataSkipToken;
-}
-
-export interface IParsedTopRes {
-    error?: Error;
-    token: IOdataTopToken;
-}
+import { IOdataFilterToken, IOdataOrderByToken, IOdataSkipToken, IOdataTopToken, IParsedFilterRes, IParsedOrderByRes, IParsedSkipRes, IParsedTopRes } from '..';
 
 class OdataQueryParser {
     private filterTokens: IOdataFilterToken[];
