@@ -11,8 +11,8 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5"
     },
-    "name": "odata-query-parser",
-    "description": "Odata query params parser.",
+    "name": "@slackbyte/odata-query-parser",
+    "description": "A highly versatile and fast OData Version 4.01 Parser.",
     "version": "1.0.0",
     "main": "dist/src/index.js",
     "scripts": {
