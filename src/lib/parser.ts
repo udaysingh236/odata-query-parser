@@ -45,7 +45,7 @@ export interface IParsedTopRes {
     token: IOdataTopToken;
 }
 
-export class OdataQueryParser {
+class OdataQueryParser {
     private filterTokens: IOdataFilterToken[];
     private filterToken: IOdataFilterToken;
     private orderByToken: IOdataOrderByToken;
@@ -79,6 +79,7 @@ export class OdataQueryParser {
     }
 
     private parseFilter(sourceStr: string) {
+        sourceStr = sourceStr.trim();
         // Needed for operators
         let numOfWhiteSpace = constants.INITIALIZE_NUM_ZERO;
         let operator = constants.INITIALIZE_STR;
@@ -332,3 +333,5 @@ export class OdataQueryParser {
         }
     }
 }
+
+export const odataQueryParser = new OdataQueryParser();
