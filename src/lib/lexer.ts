@@ -240,7 +240,7 @@ export const queryFuncLexer: Record<string, (funcArgs: string) => IOdataFilterTo
     trim: function (funcArgs) {
         return {
             tokenType: 'queryFuncExp',
-            subType: 'trim FuncExp',
+            subType: 'trimFuncExp',
             value: 'trim',
             funcArgs: funcArgs,
         };
@@ -264,7 +264,7 @@ export const queryFuncLexer: Record<string, (funcArgs: string) => IOdataFilterTo
     fractionalseconds: function (funcArgs) {
         return {
             tokenType: 'queryFuncExp',
-            subType: 'fractionalsecondsExp',
+            subType: 'fractionalsecondsFuncExp',
             value: 'fractionalseconds',
             funcArgs: funcArgs,
         };
