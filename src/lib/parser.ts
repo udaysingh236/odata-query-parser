@@ -73,7 +73,19 @@ class OdataQueryParser {
                         throw new Error(`Invalid operator ${operator} found at pos: ${index - operator.length}`);
                     }
                 } else if (prevFilterEle !== constants.INITIALIZE_STR_ONESPACE) {
-                    if (tillSpaceStr.trim().length > 0) {
+                    if (tillSpaceStr.trim().length <= 0) {
+                        prevFilterEle = filterEle;
+                        continue;
+                    }
+                    const trimTillSpaceStr = tillSpaceStr.trim();
+                    if (operatorLexer[trimTillSpaceStr] && operatorLexer[trimTillSpaceStr]().subType === 'notExp' && (this.prevLexerSubType === 'orExp' || this.prevLexerSubType === 'andExp')) {
+                        // This is a valid condition for NOT expression to be in the string;
+                        const token: IOdataFilterToken = operatorLexer[trimTillSpaceStr]();
+                        this.appendToFilterToken(token);
+                        // reset everything
+                        operator = constants.INITIALIZE_STR;
+                        numOfWhiteSpace = constants.INITIALIZE_NUM_ZERO;
+                    } else {
                         this.filterToken.tokenType = conditionLexer.conditionMemberExp;
                         this.filterToken.value = tillSpaceStr.trim();
                         this.appendToFilterToken(this.filterToken);
