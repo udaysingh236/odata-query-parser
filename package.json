@@ -13,10 +13,12 @@
     },
     "name": "@slackbyte/odata-query-parser",
     "description": "A highly versatile and fast OData Version 4.01 Parser.",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "files": [ "dist" ],
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "test": "jest",
         "test:report": "jest --coverage",

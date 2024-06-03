@@ -247,8 +247,33 @@ class OdataQueryParser {
         };
     }
 
+    private resetEverything() {
+        this.prevLexerSubType = constants.INITIALIZE_STR;
+        this.filterTokens = [];
+        this.orderByTokens = [];
+        this.filterToken = {
+            tokenType: '',
+            subType: '',
+            value: '',
+        };
+        this.orderByToken = {
+            tokenType: '',
+            colValue: '',
+            colOrder: '',
+        };
+        this.skipToken = {
+            tokenType: '',
+            value: 0,
+        };
+        this.topToken = {
+            tokenType: '',
+            value: 0,
+        };
+    }
+
     public getParsedFilter(sourceStr: string): IParsedFilterRes {
         try {
+            this.resetEverything();
             this.parseFilter(sourceStr);
             return {
                 token: this.filterTokens,
@@ -263,6 +288,7 @@ class OdataQueryParser {
 
     public getParsedOrderBy(sourceStr: string): IParsedOrderByRes {
         try {
+            this.resetEverything();
             this.parseOrderBy(sourceStr);
             return {
                 token: this.orderByTokens,
@@ -277,6 +303,7 @@ class OdataQueryParser {
 
     public getParsedSkipToken(source: string): IParsedSkipRes {
         try {
+            this.resetEverything();
             this.parseSkip(source);
             return {
                 token: this.skipToken,
@@ -291,6 +318,7 @@ class OdataQueryParser {
 
     public getParsedTopToken(source: string): IParsedTopRes {
         try {
+            this.resetEverything();
             this.parseTop(source);
             return {
                 token: this.topToken,
