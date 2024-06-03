@@ -78,7 +78,7 @@ class OdataQueryParser {
                         continue;
                     }
                     const trimTillSpaceStr = tillSpaceStr.trim();
-                    if (operatorLexer[trimTillSpaceStr] && operatorLexer[trimTillSpaceStr]().subType === 'notExp' && (this.prevLexerSubType === 'orExp' || this.prevLexerSubType === 'andExp')) {
+                    if (operatorLexer[trimTillSpaceStr] && operatorLexer[trimTillSpaceStr]().subType === 'notExp') {
                         // This is a valid condition for NOT expression to be in the string;
                         const token: IOdataFilterToken = operatorLexer[trimTillSpaceStr]();
                         this.appendToFilterToken(token);
